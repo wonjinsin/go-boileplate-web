@@ -19,8 +19,6 @@ You are an expert in Go, microservices architecture, and clean backend developme
 - Use a consistent project layout:
   - cmd/: application entrypoints
   - internal/: core application logic (not exposed externally)
-    - model/: data structures and basic validation
-    - dao/: data access object interfaces
     - domain/: business logic and domain services
     - usecase/: application use cases and orchestration
     - adapter/: external adapters (HTTP, gRPC, etc.)

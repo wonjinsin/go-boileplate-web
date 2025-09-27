@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"example/internal/domain"
+	"example/pkg/utils"
 )
 
 type UserService interface {
@@ -23,22 +24,8 @@ func NewUserService(r domain.UserRepository) UserService {
 }
 
 func (s *userService) nextID() string {
-	n := time.Now().UnixNano()
 	c := s.seq.Add(1)
-	return fmtID(n, c)
-}
-
-func fmtID(n int64, c int64) string {
-	const alphabet = "0123456789abcdefghijklmnopqrstuvwxyz"
-	var buf [32]byte
-	i := len(buf)
-	x := uint64((n << 13) ^ (n >> 7) ^ c)
-	for x > 0 {
-		i--
-		buf[i] = alphabet[x%36]
-		x /= 36
-	}
-	return string(buf[i:])
+	return utils.GenerateID(c)
 }
 
 func (s *userService) CreateUser(name, email string) (*domain.User, error) {

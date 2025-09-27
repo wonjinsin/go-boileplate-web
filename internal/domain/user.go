@@ -2,8 +2,10 @@ package domain
 
 import (
 	"errors"
-	"strings"
 	"time"
+
+	"example/pkg/constants"
+	"example/pkg/utils"
 )
 
 // Domain errors
@@ -22,23 +24,16 @@ type User struct {
 }
 
 func NewUser(id, name, email string, now time.Time) (*User, error) {
-	name = strings.TrimSpace(name)
-	email = strings.ToLower(strings.TrimSpace(email))
-	if len(name) == 0 || len(name) > 200 {
+	name = utils.NormalizeName(name)
+	email = utils.NormalizeEmail(email)
+
+	if utils.IsEmptyOrWhitespace(name) || len(name) > constants.MaxNameLength {
 		return nil, ErrInvalidName
 	}
-	if !looksLikeEmail(email) {
+	if !utils.IsValidEmail(email) {
 		return nil, errors.New("invalid email format")
 	}
 	return &User{ID: id, Name: name, Email: email, CreatedAt: now}, nil
-}
-
-func looksLikeEmail(s string) bool {
-	if len(s) < 3 {
-		return false
-	}
-	at := strings.Count(s, "@")
-	return at == 1 && strings.Contains(s, ".")
 }
 
 // Repository (domain boundary)
