@@ -1,4 +1,4 @@
-package model
+package dto
 
 import (
 	"time"
@@ -8,14 +8,8 @@ import (
 
 // CreateUserRequest represents the request payload for creating a user
 type CreateUserRequest struct {
-	Name  string `json:"name" validate:"required,min=1,max=200"`
-	Email string `json:"email" validate:"required,email"`
-}
-
-// UpdateUserRequest represents the request payload for updating a user
-type UpdateUserRequest struct {
-	Name  *string `json:"name,omitempty" validate:"omitempty,min=1,max=200"`
-	Email *string `json:"email,omitempty" validate:"omitempty,email"`
+	Name  string `json:"name"`
+	Email string `json:"email"`
 }
 
 // UserResponse represents the response payload for user data
@@ -66,14 +60,3 @@ func ToUserListResponse(users []*domain.User, total, offset, limit int) UserList
 	}
 }
 
-// ValidationError represents validation error details
-type ValidationError struct {
-	Field   string `json:"field"`
-	Message string `json:"message"`
-}
-
-// ValidationErrorResponse represents validation error response
-type ValidationErrorResponse struct {
-	Error  string            `json:"error"`
-	Fields []ValidationError `json:"fields"`
-}

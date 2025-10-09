@@ -12,23 +12,10 @@ const (
 const (
 	HeaderContentType   = "Content-Type"
 	HeaderAuthorization = "Authorization"
-	HeaderUserAgent     = "User-Agent"
 	HeaderAccept        = "Accept"
-	HeaderCacheControl  = "Cache-Control"
 )
 
 // Content Types
 const (
-	ContentTypeJSON        = "application/json"
 	ContentTypeJSONCharset = "application/json; charset=utf-8"
-	ContentTypeXML         = "application/xml"
-	ContentTypeForm        = "application/x-www-form-urlencoded"
-	ContentTypeMultipart   = "multipart/form-data"
-)
-
-// HTTP Methods (if needed beyond standard library)
-const (
-	MethodOptions = "OPTIONS"
-	MethodHead    = "HEAD"
-	MethodPatch   = "PATCH"
 )

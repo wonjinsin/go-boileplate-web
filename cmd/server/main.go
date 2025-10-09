@@ -10,22 +10,23 @@ import (
 	"syscall"
 	"time"
 
-	"example/internal/adapter/httpapi"
+	httpHandler "example/internal/handler/http"
+	"example/internal/interfaces"
 	"example/internal/repository/memory"
 	"example/internal/usecase"
 )
 
 func main() {
 	// Wiring (Composition Root)
-	userRepo := memory.NewUserRepository()
-	userSvc := usecase.NewUserService(userRepo)
+	var userRepo interfaces.UserRepository = memory.NewUserRepository()
+	var userSvc interfaces.UserService = usecase.NewUserService(userRepo)
 
-	mux := http.NewServeMux()
-	httpapi.RegisterUserRoutes(mux, userSvc)
+	// Create chi router
+	router := httpHandler.NewRouter(userSvc)
 
 	srv := &http.Server{
 		Addr:              ":8080",
-		Handler:           loggingMiddleware(mux),
+		Handler:           router,
 		ReadHeaderTimeout: 5 * time.Second,
 		ReadTimeout:       10 * time.Second,
 		WriteTimeout:      10 * time.Second,
@@ -52,12 +53,4 @@ func main() {
 		_ = srv.Close()
 	}
 	log.Println("bye")
-}
-
-func loggingMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		start := time.Now()
-		next.ServeHTTP(w, r)
-		log.Printf("%s %s %s", r.Method, r.URL.Path, time.Since(start))
-	})
 }

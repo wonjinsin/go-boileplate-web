@@ -35,11 +35,3 @@ func NewUser(id, name, email string, now time.Time) (*User, error) {
 	}
 	return &User{ID: id, Name: name, Email: email, CreatedAt: now}, nil
 }
-
-// Repository (domain boundary)
-type UserRepository interface {
-	Save(*User) error
-	FindByID(id string) (*User, error)
-	FindByEmail(email string) (*User, error)
-	List(offset, limit int) ([]*User, error)
-}

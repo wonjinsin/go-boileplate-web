@@ -50,14 +50,3 @@ func NormalizeName(name string) string {
 func IsEmptyOrWhitespace(s string) bool {
 	return len(strings.TrimSpace(s)) == 0
 }
-
-// TruncateString truncates string to specified length with ellipsis
-func TruncateString(s string, length int) string {
-	if len(s) <= length {
-		return s
-	}
-	if length <= 3 {
-		return s[:length]
-	}
-	return s[:length-3] + "..."
-}

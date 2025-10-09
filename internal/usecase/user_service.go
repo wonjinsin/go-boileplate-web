@@ -5,21 +5,16 @@ import (
 	"time"
 
 	"example/internal/domain"
+	"example/internal/interfaces"
 	"example/pkg/utils"
 )
 
-type UserService interface {
-	CreateUser(name, email string) (*domain.User, error)
-	GetUser(id string) (*domain.User, error)
-	ListUsers(offset, limit int) ([]*domain.User, error)
-}
-
 type userService struct {
-	repo domain.UserRepository
+	repo interfaces.UserRepository
 	seq  atomic.Int64
 }
 
-func NewUserService(r domain.UserRepository) UserService {
+func NewUserService(r interfaces.UserRepository) interfaces.UserService {
 	return &userService{repo: r}
 }
 

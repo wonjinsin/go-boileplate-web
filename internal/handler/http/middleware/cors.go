@@ -43,7 +43,7 @@ func CORS(config ...CORSConfig) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			origin := r.Header.Get("Origin")
-			
+
 			// Set CORS headers
 			if len(cfg.AllowedOrigins) > 0 {
 				if cfg.AllowedOrigins[0] == "*" {

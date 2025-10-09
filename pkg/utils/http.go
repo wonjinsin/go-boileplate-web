@@ -49,10 +49,3 @@ func ExtractPathParam(path, prefix string) string {
 	}
 	return path[len(prefix):]
 }
-
-// SetCORSHeaders sets common CORS headers
-func SetCORSHeaders(w http.ResponseWriter) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
-}
