@@ -5,10 +5,10 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"example/internal/constants"
-	"example/internal/handler/http/dto"
-	"example/internal/interfaces"
-	"example/pkg/utils"
+	"github.com/wonjinsin/go-boilerplate/internal/constants"
+	"github.com/wonjinsin/go-boilerplate/internal/handler/http/dto"
+	"github.com/wonjinsin/go-boilerplate/internal/interfaces"
+	"github.com/wonjinsin/go-boilerplate/pkg/utils"
 )
 
 // UserController handles user-related HTTP requests

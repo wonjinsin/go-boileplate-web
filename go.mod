@@ -1,4 +1,4 @@
-module example
+module github.com/wonjinsin/go-boilerplate
 
 go 1.22
 

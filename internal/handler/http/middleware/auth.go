@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"strings"
 
-	"example/internal/constants"
-	"example/pkg/utils"
+	"github.com/wonjinsin/go-boilerplate/internal/constants"
+	"github.com/wonjinsin/go-boilerplate/pkg/utils"
 )
 
 // AuthConfig holds authentication configuration

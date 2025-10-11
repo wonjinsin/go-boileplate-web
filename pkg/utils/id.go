@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"example/pkg/constants"
+	"github.com/wonjinsin/go-boilerplate/pkg/constants"
 )
 
 // GenerateID generates a unique ID using timestamp and counter

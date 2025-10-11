@@ -4,9 +4,9 @@ import (
 	"sync/atomic"
 	"time"
 
-	"example/internal/domain"
-	"example/internal/interfaces"
-	"example/pkg/utils"
+	"github.com/wonjinsin/go-boilerplate/internal/domain"
+	"github.com/wonjinsin/go-boilerplate/internal/interfaces"
+	"github.com/wonjinsin/go-boilerplate/pkg/utils"
 )
 
 type userService struct {

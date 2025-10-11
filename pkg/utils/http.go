@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"example/pkg/constants"
+	"github.com/wonjinsin/go-boilerplate/pkg/constants"
 )
 
 // ParsePagination extracts pagination parameters from HTTP request

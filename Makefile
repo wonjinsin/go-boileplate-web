@@ -10,19 +10,6 @@ MOCK = $(GOBIN)/mockgen
 PKG_LIST = $(shell cd $(BASE_PATH) && cat pkg.list)
 
 
-# Using yq, env to read values from environment-specific YAML
-ifneq ($(MAKECMDGOALS),tool)
-	MIGRATION_PATH = $(BASE_PATH)/migrate
-	ENV ?= local
-	ENV_FILE = config/$(ENV).yml
-	MYSQL_USER := $(shell yq '.database.username' $(ENV_FILE))
-	MYSQL_PASSWORD := $(shell yq '.database.password' $(ENV_FILE))
-	MYSQL_HOST := $(shell yq '.database.host' $(ENV_FILE))
-	MYSQL_PORT := $(shell yq '.database.port' $(ENV_FILE))
-	MYSQL_DATABASE := $(shell yq '.database.dbname' $(ENV_FILE))
-	MIGRATE = migrate -source file://$(MIGRATION_PATH) -database "mysql://$(MYSQL_USER):$(MYSQL_PASSWORD)@tcp($(MYSQL_HOST):$(MYSQL_PORT))/$(MYSQL_DATABASE)?charset=utf8mb4&parseTime=true&loc=UTC&multiStatements=true"
-endif
-
 ifneq (, $(CUSTOM_OS))
 	OS ?= $(CUSTOM_OS)
 else

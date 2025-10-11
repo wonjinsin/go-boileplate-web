@@ -5,8 +5,8 @@ import (
 	"sync"
 	"time"
 
-	"example/internal/constants"
-	"example/pkg/utils"
+	"github.com/wonjinsin/go-boilerplate/internal/constants"
+	"github.com/wonjinsin/go-boilerplate/pkg/utils"
 )
 
 // RateLimitConfig holds rate limiting configuration

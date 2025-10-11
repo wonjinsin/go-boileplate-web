@@ -1,6 +1,6 @@
 package interfaces
 
-import "example/internal/domain"
+import "github.com/wonjinsin/go-boilerplate/internal/domain"
 
 // UserRepository defines the interface for user data access
 type UserRepository interface {

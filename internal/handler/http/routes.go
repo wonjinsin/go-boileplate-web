@@ -4,7 +4,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 
-	"example/internal/interfaces"
+	"github.com/wonjinsin/go-boilerplate/internal/interfaces"
 )
 
 // NewRouter creates and configures a new chi router

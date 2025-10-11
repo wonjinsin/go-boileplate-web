@@ -5,8 +5,8 @@ import (
 	"sort"
 	"sync"
 
-	"example/internal/domain"
-	"example/internal/interfaces"
+	"github.com/wonjinsin/go-boilerplate/internal/domain"
+	"github.com/wonjinsin/go-boilerplate/internal/interfaces"
 )
 
 type userRepo struct {

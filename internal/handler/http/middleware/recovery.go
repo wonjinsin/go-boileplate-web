@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"runtime/debug"
 
-	"example/pkg/utils"
+	"github.com/wonjinsin/go-boilerplate/pkg/utils"
 )
 
 // RecoveryConfig holds recovery configuration

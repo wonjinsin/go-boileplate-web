@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"example/pkg/constants"
+	"github.com/wonjinsin/go-boilerplate/pkg/constants"
 )
 
 // CORSConfig holds CORS configuration

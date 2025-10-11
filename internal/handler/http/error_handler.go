@@ -3,10 +3,10 @@ package http
 import (
 	"net/http"
 
-	"example/internal/constants"
-	"example/internal/domain"
-	"example/internal/handler/http/dto"
-	"example/pkg/utils"
+	"github.com/wonjinsin/go-boilerplate/internal/constants"
+	"github.com/wonjinsin/go-boilerplate/internal/domain"
+	"github.com/wonjinsin/go-boilerplate/internal/handler/http/dto"
+	"github.com/wonjinsin/go-boilerplate/pkg/utils"
 )
 
 // writeError writes domain errors as HTTP responses
@@ -34,4 +34,3 @@ func writeError(w http.ResponseWriter, err error) {
 		})
 	}
 }
-

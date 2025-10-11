@@ -4,8 +4,8 @@ import (
 	"errors"
 	"time"
 
-	"example/pkg/constants"
-	"example/pkg/utils"
+	"github.com/wonjinsin/go-boilerplate/pkg/constants"
+	"github.com/wonjinsin/go-boilerplate/pkg/utils"
 )
 
 // Domain errors

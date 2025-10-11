@@ -1,6 +1,6 @@
 package interfaces
 
-import "example/internal/domain"
+import "github.com/wonjinsin/go-boilerplate/internal/domain"
 
 // UserService defines the interface for user business logic
 type UserService interface {

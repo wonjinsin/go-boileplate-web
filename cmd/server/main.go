@@ -10,10 +10,10 @@ import (
 	"syscall"
 	"time"
 
-	httpHandler "example/internal/handler/http"
-	"example/internal/interfaces"
-	"example/internal/repository/memory"
-	"example/internal/usecase"
+	httpHandler "github.com/wonjinsin/go-boilerplate/internal/handler/http"
+	"github.com/wonjinsin/go-boilerplate/internal/interfaces"
+	"github.com/wonjinsin/go-boilerplate/internal/repository/memory"
+	"github.com/wonjinsin/go-boilerplate/internal/usecase"
 )
 
 func main() {

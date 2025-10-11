@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 
-	"example/internal/constants"
-	"example/pkg/utils"
+	"github.com/wonjinsin/go-boilerplate/internal/constants"
+	"github.com/wonjinsin/go-boilerplate/pkg/utils"
 )
 
 // RequestIDConfig holds request ID configuration

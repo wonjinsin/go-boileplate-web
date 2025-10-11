@@ -3,7 +3,7 @@ package dto
 import (
 	"time"
 
-	"example/internal/domain"
+	"github.com/wonjinsin/go-boilerplate/internal/domain"
 )
 
 // CreateUserRequest represents the request payload for creating a user
@@ -59,4 +59,3 @@ func ToUserListResponse(users []*domain.User, total, offset, limit int) UserList
 		Limit:  limit,
 	}
 }
-
