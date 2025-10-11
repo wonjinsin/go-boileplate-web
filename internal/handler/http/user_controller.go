@@ -5,7 +5,6 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"github.com/wonjinsin/go-boilerplate/internal/constants"
 	"github.com/wonjinsin/go-boilerplate/internal/handler/http/dto"
 	"github.com/wonjinsin/go-boilerplate/internal/interfaces"
 	"github.com/wonjinsin/go-boilerplate/pkg/utils"
@@ -25,21 +24,20 @@ func NewUserController(svc interfaces.UserService) *UserController {
 func (c *UserController) CreateUser(w http.ResponseWriter, r *http.Request) {
 	var req dto.CreateUserRequest
 	if err := utils.ParseJSONBody(r, &req); err != nil {
-		utils.WriteJSON(w, http.StatusBadRequest, dto.ErrorResponse{
-			Error: "invalid json",
-			Code:  constants.ErrCodeInvalidJSON,
+		utils.WriteStandardJSON(w, r, http.StatusBadRequest, dto.ErrorResult{
+			Msg: "invalid json",
 		})
 		return
 	}
 
 	u, err := c.svc.CreateUser(req.Name, req.Email)
 	if err != nil {
-		writeError(w, err)
+		writeError(w, r, err)
 		return
 	}
 
 	response := dto.ToUserResponse(u)
-	utils.WriteJSON(w, http.StatusCreated, response)
+	utils.WriteStandardJSON(w, r, http.StatusCreated, response)
 }
 
 // ListUsers handles user listing with pagination
@@ -47,34 +45,32 @@ func (c *UserController) ListUsers(w http.ResponseWriter, r *http.Request) {
 	offset, limit := utils.ParsePagination(r)
 	list, err := c.svc.ListUsers(offset, limit)
 	if err != nil {
-		utils.WriteJSON(w, http.StatusInternalServerError, dto.ErrorResponse{
-			Error: err.Error(),
-			Code:  constants.ErrCodeInternalError,
+		utils.WriteStandardJSON(w, r, http.StatusInternalServerError, dto.ErrorResult{
+			Msg: err.Error(),
 		})
 		return
 	}
 
 	response := dto.ToUserListResponse(list, len(list), offset, limit)
-	utils.WriteJSON(w, http.StatusOK, response)
+	utils.WriteStandardJSON(w, r, http.StatusOK, response)
 }
 
 // GetUser handles retrieving a single user by ID
 func (c *UserController) GetUser(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	if id == "" {
-		utils.WriteJSON(w, http.StatusBadRequest, dto.ErrorResponse{
-			Error: "user id is required",
-			Code:  constants.ErrCodeMissingUserID,
+		utils.WriteStandardJSON(w, r, http.StatusBadRequest, dto.ErrorResult{
+			Msg: "user id is required",
 		})
 		return
 	}
 
 	u, err := c.svc.GetUser(id)
 	if err != nil {
-		writeError(w, err)
+		writeError(w, r, err)
 		return
 	}
 
 	response := dto.ToUserResponse(u)
-	utils.WriteJSON(w, http.StatusOK, response)
+	utils.WriteStandardJSON(w, r, http.StatusOK, response)
 }

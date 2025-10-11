@@ -2,6 +2,7 @@ package utils
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -48,4 +49,36 @@ func ExtractPathParam(path, prefix string) string {
 		return ""
 	}
 	return path[len(prefix):]
+}
+
+// WriteStandardJSON writes a standard JSON response with TrID
+func WriteStandardJSON(w http.ResponseWriter, r *http.Request, code int, result any) {
+	// Get TrID from context
+	trID := ""
+	if ctx := r.Context(); ctx != nil {
+		if id, ok := ctx.Value(constants.ContextKeyTrID).(string); ok {
+			trID = id
+		}
+	}
+
+	// Format code as 4-digit string (e.g., 200 -> "0200")
+	codeStr := fmt.Sprintf("%04d", code)
+
+	// Create standard response
+	response := map[string]any{
+		"trid": trID,
+		"code": codeStr,
+	}
+
+	// Only add result if it's not nil
+	if result != nil {
+		response["result"] = result
+	}
+
+	w.Header().Set(constants.HeaderContentType, constants.ContentTypeJSONCharset)
+	w.WriteHeader(code)
+
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		log.Printf("json encode error: %v", err)
+	}
 }

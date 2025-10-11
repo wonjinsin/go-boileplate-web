@@ -4,6 +4,6 @@ package constants
 type contextKey string
 
 const (
-	ContextKeyUserID    contextKey = "user_id"
-	ContextKeyRequestID contextKey = "request_id"
+	ContextKeyUserID contextKey = "user_id"
+	ContextKeyTrID   contextKey = "tr_id"
 )

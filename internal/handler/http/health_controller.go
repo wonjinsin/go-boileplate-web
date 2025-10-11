@@ -2,6 +2,8 @@ package http
 
 import (
 	"net/http"
+
+	"github.com/wonjinsin/go-boilerplate/pkg/utils"
 )
 
 // HealthController handles health check endpoints
@@ -14,5 +16,5 @@ func NewHealthController() *HealthController {
 
 // Check handles health check requests
 func (c *HealthController) Check(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
+	utils.WriteStandardJSON(w, r, http.StatusOK, nil)
 }

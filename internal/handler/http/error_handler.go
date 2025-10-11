@@ -3,34 +3,29 @@ package http
 import (
 	"net/http"
 
-	"github.com/wonjinsin/go-boilerplate/internal/constants"
 	"github.com/wonjinsin/go-boilerplate/internal/domain"
 	"github.com/wonjinsin/go-boilerplate/internal/handler/http/dto"
 	"github.com/wonjinsin/go-boilerplate/pkg/utils"
 )
 
 // writeError writes domain errors as HTTP responses
-func writeError(w http.ResponseWriter, err error) {
+func writeError(w http.ResponseWriter, r *http.Request, err error) {
 	switch err {
 	case domain.ErrUserNotFound:
-		utils.WriteJSON(w, http.StatusNotFound, dto.ErrorResponse{
-			Error: err.Error(),
-			Code:  constants.ErrCodeUserNotFound,
+		utils.WriteStandardJSON(w, r, http.StatusNotFound, dto.ErrorResult{
+			Msg: err.Error(),
 		})
 	case domain.ErrDuplicateEmail:
-		utils.WriteJSON(w, http.StatusConflict, dto.ErrorResponse{
-			Error: err.Error(),
-			Code:  constants.ErrCodeDuplicateEmail,
+		utils.WriteStandardJSON(w, r, http.StatusConflict, dto.ErrorResult{
+			Msg: err.Error(),
 		})
 	case domain.ErrInvalidName:
-		utils.WriteJSON(w, http.StatusBadRequest, dto.ErrorResponse{
-			Error: err.Error(),
-			Code:  constants.ErrCodeInvalidName,
+		utils.WriteStandardJSON(w, r, http.StatusBadRequest, dto.ErrorResult{
+			Msg: err.Error(),
 		})
 	default:
-		utils.WriteJSON(w, http.StatusBadRequest, dto.ErrorResponse{
-			Error: err.Error(),
-			Code:  constants.ErrCodeBadRequest,
+		utils.WriteStandardJSON(w, r, http.StatusBadRequest, dto.ErrorResult{
+			Msg: err.Error(),
 		})
 	}
 }
