@@ -6,17 +6,17 @@ import (
 	"github.com/go-chi/chi/v5"
 
 	"github.com/wonjinsin/go-boilerplate/internal/handler/http/dto"
-	"github.com/wonjinsin/go-boilerplate/internal/interfaces"
+	"github.com/wonjinsin/go-boilerplate/internal/usecase"
 	"github.com/wonjinsin/go-boilerplate/pkg/utils"
 )
 
 // UserController handles user-related HTTP requests
 type UserController struct {
-	svc interfaces.UserService
+	svc usecase.UserService
 }
 
 // NewUserController creates a new user controller
-func NewUserController(svc interfaces.UserService) *UserController {
+func NewUserController(svc usecase.UserService) *UserController {
 	return &UserController{svc: svc}
 }
 
@@ -30,7 +30,7 @@ func (c *UserController) CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	u, err := c.svc.CreateUser(req.Name, req.Email)
+	u, err := c.svc.CreateUser(r.Context(), req.Name, req.Email)
 	if err != nil {
 		writeError(w, r, err)
 		return
@@ -43,7 +43,7 @@ func (c *UserController) CreateUser(w http.ResponseWriter, r *http.Request) {
 // ListUsers handles user listing with pagination
 func (c *UserController) ListUsers(w http.ResponseWriter, r *http.Request) {
 	offset, limit := utils.ParsePagination(r)
-	list, err := c.svc.ListUsers(offset, limit)
+	list, err := c.svc.ListUsers(r.Context(), offset, limit)
 	if err != nil {
 		utils.WriteStandardJSON(w, r, http.StatusInternalServerError, dto.ErrorResult{
 			Msg: err.Error(),
@@ -65,7 +65,7 @@ func (c *UserController) GetUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	u, err := c.svc.GetUser(id)
+	u, err := c.svc.GetUser(r.Context(), id)
 	if err != nil {
 		writeError(w, r, err)
 		return

@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -10,22 +11,36 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/wonjinsin/go-boilerplate/internal/config"
 	httpHandler "github.com/wonjinsin/go-boilerplate/internal/handler/http"
-	"github.com/wonjinsin/go-boilerplate/internal/interfaces"
+	"github.com/wonjinsin/go-boilerplate/internal/repository"
 	"github.com/wonjinsin/go-boilerplate/internal/repository/memory"
 	"github.com/wonjinsin/go-boilerplate/internal/usecase"
+	"github.com/wonjinsin/go-boilerplate/pkg/logger"
 )
 
 func main() {
+	// Print ASCII art banner
+	printBanner()
+
+	// Set timezone to UTC for the entire program
+	time.Local = time.UTC
+
+	// Load configuration
+	cfg := config.Load()
+
+	// Initialize logger
+	logger.Initialize(cfg.Env)
+
 	// Wiring (Composition Root)
-	var userRepo interfaces.UserRepository = memory.NewUserRepository()
-	var userSvc interfaces.UserService = usecase.NewUserService(userRepo)
+	var userRepo repository.UserRepository = memory.NewUserRepository()
+	var userSvc usecase.UserService = usecase.NewUserService(userRepo)
 
 	// Create chi router
 	router := httpHandler.NewRouter(userSvc)
 
 	srv := &http.Server{
-		Addr:              ":8080",
+		Addr:              fmt.Sprintf(":%s", cfg.Port),
 		Handler:           router,
 		ReadHeaderTimeout: 5 * time.Second,
 		ReadTimeout:       10 * time.Second,
@@ -53,4 +68,16 @@ func main() {
 		_ = srv.Close()
 	}
 	log.Println("bye")
+}
+
+func printBanner() {
+	// Read banner from file
+	bannerPath := "internal/config/banner.asc"
+	bannerBytes, err := os.ReadFile(bannerPath)
+	if err != nil {
+		log.Printf("warning: could not read banner file: %v", err)
+		return
+	}
+
+	log.Println(string(bannerBytes))
 }

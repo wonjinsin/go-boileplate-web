@@ -17,14 +17,20 @@ You are an expert in Go, microservices architecture, and clean backend developme
 ### Project Structure Guidelines:
 
 - Use a consistent project layout:
-  - cmd/: application entrypoints
+  - cmd/: application entrypoints (main.go for each service)
   - internal/: core application logic (not exposed externally)
-    - domain/: business logic and domain services
-    - usecase/: application use cases and orchestration
-    - adapter/: external adapters (HTTP, gRPC, etc.)
-    - repository/: concrete implementations of DAO interfaces
-  - pkg/: shared utilities and packages
-  - api/: gRPC/REST transport definitions and handlers
+    - constants/: application-level constants and error definitions
+    - domain/: business logic, domain models and domain services
+    - usecase/: application use cases and business orchestration
+    - handler/: transport layer handlers (HTTP, gRPC, etc.)
+      - http/: HTTP controllers, middleware, routes, and DTOs
+    - repository/: concrete implementations of repository interfaces
+    - interfaces/: interface definitions (repository, service)
+    - shared/: shared internal utilities
+  - pkg/: reusable packages (can be imported by external projects)
+    - constants/: shared constants (HTTP, validation, etc.)
+    - logger/: logging utilities and wrappers
+    - utils/: common utility functions
   - configs/: configuration schemas and loading
   - test/: test utilities, mocks, and integration tests
 - Group code by feature when it improves clarity and cohesion.

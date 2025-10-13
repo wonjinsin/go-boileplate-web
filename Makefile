@@ -1,9 +1,9 @@
-PACKAGE = pikachu
+PACKAGE = github.com/wonjinsin/go-boilerplate
 CUSTOM_OS = ${GOOS}
 BASE_PATH = $(shell pwd)
 BIN = $(BASE_PATH)/bin
-BINARY_NAME = bin/$(PACKAGE)
-MAIN = $(BASE_PATH)/main.go
+BINARY_NAME = bin/server
+MAIN = $(BASE_PATH)/cmd/server/main.go
 GOLINT = $(BIN)/golint
 GOBIN = $(shell go env GOPATH)/bin
 MOCK = $(GOBIN)/mockgen
@@ -19,7 +19,6 @@ endif
 tool:
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 	go install -tags 'mysql' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
-	go install github.com/mikefarah/yq/v4@latest
 	go install go.uber.org/mock/mockgen@latest
 
 build:
@@ -43,12 +42,12 @@ test: build-mocks
 test-all: test vet fmt lint
 
 build-mocks:
-	$(MOCK) -source=service/service.go -destination=mock/mock_service.go -package=mock
-	$(MOCK) -source=repository/repository.go -destination=mock/mock_repository.go -package=mock
+	$(MOCK) -source=internal/interfaces/service.go -destination=mock/mock_service.go -package=mock
+	$(MOCK) -source=internal/interfaces/repository.go -destination=mock/mock_repository.go -package=mock
 
 .PHONY: init
 init: 
-	go mod init pikachu
+	go mod init $(PACKAGE)
 
 .PHONY: tidy
 tidy: 
@@ -73,7 +72,7 @@ endif
 	$(MIGRATE) down 1
 
 start:
-	@$(BIN)/$(PACKAGE)
+	@$(BINARY_NAME)
 
 all: tool init tidy vendor build
 

@@ -1,4 +1,4 @@
-package interfaces
+package repository
 
 import "github.com/wonjinsin/go-boilerplate/internal/domain"
 

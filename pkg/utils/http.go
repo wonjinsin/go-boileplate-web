@@ -51,6 +51,13 @@ func ExtractPathParam(path, prefix string) string {
 	return path[len(prefix):]
 }
 
+// StandardResponse represents the standard HTTP response format
+type StandardResponse struct {
+	TrID   string `json:"trid"`
+	Code   string `json:"code"`
+	Result any    `json:"result,omitempty"`
+}
+
 // WriteStandardJSON writes a standard JSON response with TrID
 func WriteStandardJSON(w http.ResponseWriter, r *http.Request, code int, result any) {
 	// Get TrID from context
@@ -64,15 +71,11 @@ func WriteStandardJSON(w http.ResponseWriter, r *http.Request, code int, result 
 	// Format code as 4-digit string (e.g., 200 -> "0200")
 	codeStr := fmt.Sprintf("%04d", code)
 
-	// Create standard response
-	response := map[string]any{
-		"trid": trID,
-		"code": codeStr,
-	}
-
-	// Only add result if it's not nil
-	if result != nil {
-		response["result"] = result
+	// Create standard response using struct (preserves field order)
+	response := StandardResponse{
+		TrID:   trID,
+		Code:   codeStr,
+		Result: result,
 	}
 
 	w.Header().Set(constants.HeaderContentType, constants.ContentTypeJSONCharset)

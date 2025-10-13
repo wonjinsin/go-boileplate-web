@@ -5,17 +5,18 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 
 	custommiddleware "github.com/wonjinsin/go-boilerplate/internal/handler/http/middleware"
-	"github.com/wonjinsin/go-boilerplate/internal/interfaces"
+	"github.com/wonjinsin/go-boilerplate/internal/usecase"
 )
 
 // NewRouter creates and configures a new chi router
-func NewRouter(userSvc interfaces.UserService) *chi.Mux {
+func NewRouter(userSvc usecase.UserService) *chi.Mux {
 	r := chi.NewRouter()
 
 	// Middleware
 	r.Use(custommiddleware.TrID())
+	r.Use(custommiddleware.CORS())
 	r.Use(middleware.RealIP)
-	r.Use(middleware.Logger)
+	r.Use(custommiddleware.HTTPLogger())
 	r.Use(middleware.Recoverer)
 
 	// Controllers
