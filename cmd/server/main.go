@@ -13,8 +13,7 @@ import (
 
 	"github.com/wonjinsin/go-boilerplate/internal/config"
 	httpHandler "github.com/wonjinsin/go-boilerplate/internal/handler/http"
-	"github.com/wonjinsin/go-boilerplate/internal/repository"
-	"github.com/wonjinsin/go-boilerplate/internal/repository/memory"
+	"github.com/wonjinsin/go-boilerplate/internal/repository/postgres"
 	"github.com/wonjinsin/go-boilerplate/internal/usecase"
 	"github.com/wonjinsin/go-boilerplate/pkg/logger"
 )
@@ -32,8 +31,20 @@ func main() {
 	// Initialize logger
 	logger.Initialize(cfg.Env)
 
+	// Initialize database connection
+	userRepo, err := postgres.NewUserRepository(cfg)
+	if err != nil {
+		log.Fatalf("failed to initialize database: %v", err)
+	}
+	defer func() {
+		if closer, ok := userRepo.(interface{ Close() error }); ok {
+			if err := closer.Close(); err != nil {
+				log.Printf("failed to close database: %v", err)
+			}
+		}
+	}()
+
 	// Wiring (Composition Root)
-	var userRepo repository.UserRepository = memory.NewUserRepository()
 	var userSvc usecase.UserService = usecase.NewUserService(userRepo)
 
 	// Create chi router

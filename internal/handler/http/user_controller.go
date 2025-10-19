@@ -2,6 +2,7 @@ package http
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/go-chi/chi/v5"
 
@@ -57,10 +58,18 @@ func (c *UserController) ListUsers(w http.ResponseWriter, r *http.Request) {
 
 // GetUser handles retrieving a single user by ID
 func (c *UserController) GetUser(w http.ResponseWriter, r *http.Request) {
-	id := chi.URLParam(r, "id")
-	if id == "" {
+	idStr := chi.URLParam(r, "id")
+	if idStr == "" {
 		utils.WriteStandardJSON(w, r, http.StatusBadRequest, dto.ErrorResult{
 			Msg: "user id is required",
+		})
+		return
+	}
+
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		utils.WriteStandardJSON(w, r, http.StatusBadRequest, dto.ErrorResult{
+			Msg: "invalid user id format",
 		})
 		return
 	}

@@ -17,13 +17,13 @@ var (
 
 // User is an aggregate root.
 type User struct {
-	ID        string
+	ID        int
 	Name      string
 	Email     string
 	CreatedAt time.Time
 }
 
-func NewUser(id, name, email string, now time.Time) (*User, error) {
+func NewUser(id int, name, email string, now time.Time) (*User, error) {
 	name = utils.NormalizeName(name)
 	email = utils.NormalizeEmail(email)
 

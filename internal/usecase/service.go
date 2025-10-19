@@ -9,6 +9,6 @@ import (
 // UserService defines the interface for user business logic
 type UserService interface {
 	CreateUser(ctx context.Context, name, email string) (*domain.User, error)
-	GetUser(ctx context.Context, id string) (*domain.User, error)
+	GetUser(ctx context.Context, id int) (*domain.User, error)
 	ListUsers(ctx context.Context, offset, limit int) ([]*domain.User, error)
 }
