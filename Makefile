@@ -42,8 +42,8 @@ test: build-mocks
 test-all: test vet fmt lint
 
 build-mocks:
-	$(MOCK) -source=internal/interfaces/service.go -destination=mock/mock_service.go -package=mock
-	$(MOCK) -source=internal/interfaces/repository.go -destination=mock/mock_repository.go -package=mock
+	$(MOCK) -source=internal/usecase/service.go -destination=mock/mock_service.go -package=mock
+	$(MOCK) -source=internal/repository/repository.go -destination=mock/mock_repository.go -package=mock
 
 .PHONY: init
 init: 
@@ -57,19 +57,24 @@ tidy:
 vendor: build-mocks
 	go mod vendor
 
+# Infrastructure commands
+.PHONY: infra-up
+infra-up:
+	docker compose up -d
+
+.PHONY: infra-down
+infra-down:
+	docker compose down
+
+# Migration commands
 migrate-up:
-ifndef ENV
-	$(error ENV is not set. Please specify environment e.g., 'make migrate-up ENV=dev')
-endif
-	@echo "Running migrations for $(ENV) environment using $(ENV_FILE)"
-	$(MIGRATE) up
+	go run cmd/migrate/main.go up
 
 migrate-down:
-ifndef ENV
-	$(error ENV is not set. Please specify environment e.g., 'make migrate-up ENV=dev')
-endif
-	@echo "Running migrations for $(ENV) environment using $(ENV_FILE)"
-	$(MIGRATE) down 1
+	go run cmd/migrate/main.go down
+
+migrate-version:
+	go run cmd/migrate/main.go version
 
 start:
 	@$(BINARY_NAME)
