@@ -10,10 +10,12 @@ import (
 	_ "github.com/jackc/pgx/v5/stdlib"
 
 	"github.com/wonjinsin/go-boilerplate/internal/config"
+	"github.com/wonjinsin/go-boilerplate/internal/constants"
 	"github.com/wonjinsin/go-boilerplate/internal/domain"
 	"github.com/wonjinsin/go-boilerplate/internal/repository"
 	"github.com/wonjinsin/go-boilerplate/internal/repository/postgres/dao/ent"
 	"github.com/wonjinsin/go-boilerplate/internal/repository/postgres/dao/ent/user"
+	"github.com/wonjinsin/go-boilerplate/pkg/errors"
 )
 
 type userRepo struct {
@@ -76,9 +78,9 @@ func (r *userRepo) Save(u *domain.User) error {
 	if err != nil {
 		// Check for duplicate email error
 		if ent.IsConstraintError(err) {
-			return domain.ErrDuplicateEmail
+			return errors.New(constants.ConstraintError, "duplicate email", err)
 		}
-		return fmt.Errorf("failed to create user: %w", err)
+		return errors.Wrap(err, "failed to create user")
 	}
 
 	// Update domain object with generated ID
@@ -96,9 +98,9 @@ func (r *userRepo) FindByID(id int) (*domain.User, error) {
 		Only(ctx)
 	if err != nil {
 		if ent.IsNotFound(err) {
-			return nil, domain.ErrUserNotFound
+			return nil, errors.New(constants.NotFound, "user not found", err)
 		}
-		return nil, fmt.Errorf("failed to find user: %w", err)
+		return nil, errors.Wrap(err, "failed to find user")
 	}
 
 	return toDomainUser(u), nil
@@ -114,9 +116,9 @@ func (r *userRepo) FindByEmail(email string) (*domain.User, error) {
 		Only(ctx)
 	if err != nil {
 		if ent.IsNotFound(err) {
-			return nil, nil // Return nil for not found (not an error in this case)
+			return nil, errors.New(constants.NotFound, "user not found", err)
 		}
-		return nil, fmt.Errorf("failed to find user by email: %w", err)
+		return nil, errors.Wrap(err, "failed to find user by email")
 	}
 
 	return toDomainUser(u), nil
@@ -133,7 +135,7 @@ func (r *userRepo) List(offset, limit int) ([]*domain.User, error) {
 		Limit(limit).
 		All(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("failed to list users: %w", err)
+		return nil, errors.Wrap(err, "failed to list users")
 	}
 
 	result := make([]*domain.User, len(users))

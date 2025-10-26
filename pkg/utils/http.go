@@ -59,7 +59,8 @@ type StandardResponse struct {
 }
 
 // WriteStandardJSON writes a standard JSON response with TrID
-func WriteStandardJSON(w http.ResponseWriter, r *http.Request, code int, result any) {
+// Accepts an optional custom code string. If not provided, uses HTTP status code.
+func WriteStandardJSON(w http.ResponseWriter, r *http.Request, httpStatus int, result any, customCode ...string) {
 	// Get TrID from context
 	trID := ""
 	if ctx := r.Context(); ctx != nil {
@@ -68,8 +69,13 @@ func WriteStandardJSON(w http.ResponseWriter, r *http.Request, code int, result 
 		}
 	}
 
-	// Format code as 4-digit string (e.g., 200 -> "0200")
-	codeStr := fmt.Sprintf("%04d", code)
+	// Determine response code: use custom code if provided, otherwise format HTTP status
+	var codeStr string
+	if len(customCode) > 0 && customCode[0] != "" {
+		codeStr = customCode[0]
+	} else {
+		codeStr = fmt.Sprintf("%04d", httpStatus)
+	}
 
 	// Create standard response using struct (preserves field order)
 	response := StandardResponse{
@@ -79,7 +85,7 @@ func WriteStandardJSON(w http.ResponseWriter, r *http.Request, code int, result 
 	}
 
 	w.Header().Set(constants.HeaderContentType, constants.ContentTypeJSONCharset)
-	w.WriteHeader(code)
+	w.WriteHeader(httpStatus)
 
 	if err := json.NewEncoder(w).Encode(response); err != nil {
 		log.Printf("json encode error: %v", err)
