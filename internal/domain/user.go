@@ -29,3 +29,5 @@ func NewUser(id int, name, email string, now time.Time) (*User, error) {
 	}
 	return &User{ID: id, Name: name, Email: email, CreatedAt: now}, nil
 }
+
+type Users []*User

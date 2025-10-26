@@ -125,7 +125,7 @@ func (r *userRepo) FindByEmail(email string) (*domain.User, error) {
 }
 
 // List retrieves a list of users with pagination
-func (r *userRepo) List(offset, limit int) ([]*domain.User, error) {
+func (r *userRepo) List(offset, limit int) (domain.Users, error) {
 	ctx := context.Background()
 
 	users, err := r.client.User.
@@ -138,7 +138,7 @@ func (r *userRepo) List(offset, limit int) ([]*domain.User, error) {
 		return nil, errors.Wrap(err, "failed to list users")
 	}
 
-	result := make([]*domain.User, len(users))
+	result := make(domain.Users, len(users))
 	for i, u := range users {
 		result[i] = toDomainUser(u)
 	}

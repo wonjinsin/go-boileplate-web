@@ -199,3 +199,8 @@ Adapter → UseCase → Domain → DAO ← Repository
 3. Emphasize clear **boundaries** and **dependency inversion**.
 4. Ensure all behavior is **observable, testable, and documented**.
 5. **Automate workflows** for testing, building, and deployment.
+6. **Custom structure arrays** should always use named slice types instead of inline slice declarations:
+   - Define types in the format `type CustomStructures []*CustomStructure` in the domain model file
+   - Always use the named type (e.g., `domain.Users`) instead of inline declarations (e.g., `[]*domain.User`)
+   - This pattern improves readability, maintainability, and allows for future method additions on the collection type
+   - Example: `type Users []*User` then use `func GetUsers() (Users, error)` instead of `func GetUsers() ([]*User, error)`

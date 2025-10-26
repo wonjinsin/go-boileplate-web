@@ -50,7 +50,7 @@ func (s *userService) GetUser(ctx context.Context, id int) (*domain.User, error)
 	return u, nil
 }
 
-func (s *userService) ListUsers(ctx context.Context, offset, limit int) ([]*domain.User, error) {
+func (s *userService) ListUsers(ctx context.Context, offset, limit int) (domain.Users, error) {
 	if limit <= 0 {
 		limit = 50
 	}

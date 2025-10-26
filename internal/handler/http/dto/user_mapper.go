@@ -12,8 +12,8 @@ func ToUserResponse(user *domain.User) UserResponse {
 	}
 }
 
-// ToUserListResponse converts slice of domain.User to UserListResponse
-func ToUserListResponse(users []*domain.User, total, offset, limit int) UserListResponse {
+// ToUserListResponse converts domain.Users to UserListResponse
+func ToUserListResponse(users domain.Users, total, offset, limit int) UserListResponse {
 	userResponses := make([]UserResponse, len(users))
 	for i, user := range users {
 		userResponses[i] = ToUserResponse(user)
