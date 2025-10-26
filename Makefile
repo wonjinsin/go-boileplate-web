@@ -33,7 +33,8 @@ fmt:
 	go fmt
 
 .PHONY: lint
-lint: golangci-lint run
+lint:
+	$(GOBIN)/golangci-lint run
 
 .PHONY: test
 test: build-mocks
