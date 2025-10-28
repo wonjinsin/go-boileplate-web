@@ -2,14 +2,8 @@ package postgres
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 
-	"entgo.io/ent/dialect"
-	entsql "entgo.io/ent/dialect/sql"
-	_ "github.com/jackc/pgx/v5/stdlib"
-
-	"github.com/wonjinsin/go-boilerplate/internal/config"
 	"github.com/wonjinsin/go-boilerplate/internal/constants"
 	"github.com/wonjinsin/go-boilerplate/internal/domain"
 	"github.com/wonjinsin/go-boilerplate/internal/repository"
@@ -23,28 +17,8 @@ type userRepo struct {
 }
 
 // NewUserRepository creates a new PostgreSQL-based user repository
-func NewUserRepository(cfg *config.Config) (repository.UserRepository, error) {
-	// Open database connection
-	db, err := sql.Open("pgx", cfg.GetDatabaseURL())
-	if err != nil {
-		return nil, fmt.Errorf("failed to connect to database: %w", err)
-	}
-
-	// Test connection
-	if err := db.Ping(); err != nil {
-		return nil, fmt.Errorf("failed to ping database: %w", err)
-	}
-
-	// Create ent client
-	drv := entsql.OpenDB(dialect.Postgres, db)
-	client := ent.NewClient(ent.Driver(drv))
-
-	return &userRepo{client: client}, nil
-}
-
-// Close closes the database connection
-func (r *userRepo) Close() error {
-	return r.client.Close()
+func NewUserRepository(client *ent.Client) repository.UserRepository {
+	return &userRepo{client: client}
 }
 
 // Save creates or updates a user

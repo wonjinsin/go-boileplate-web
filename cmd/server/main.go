@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/wonjinsin/go-boilerplate/internal/config"
+	"github.com/wonjinsin/go-boilerplate/internal/database"
 	httpHandler "github.com/wonjinsin/go-boilerplate/internal/handler/http"
 	"github.com/wonjinsin/go-boilerplate/internal/repository/postgres"
 	"github.com/wonjinsin/go-boilerplate/internal/usecase"
@@ -31,18 +32,19 @@ func main() {
 	// Initialize logger
 	logger.Initialize(cfg.Env)
 
-	// Initialize database connection
-	userRepo, err := postgres.NewUserRepository(cfg)
+	// Initialize database client
+	entClient, err := database.NewEntClient(cfg)
 	if err != nil {
 		log.Fatalf("failed to initialize database: %v", err)
 	}
 	defer func() {
-		if closer, ok := userRepo.(interface{ Close() error }); ok {
-			if err := closer.Close(); err != nil {
-				log.Printf("failed to close database: %v", err)
-			}
+		if err := entClient.Close(); err != nil {
+			log.Printf("failed to close database: %v", err)
 		}
 	}()
+
+	// Initialize repositories
+	userRepo := postgres.NewUserRepository(entClient)
 
 	// Wiring (Composition Root)
 	var userSvc usecase.UserService = usecase.NewUserService(userRepo)
