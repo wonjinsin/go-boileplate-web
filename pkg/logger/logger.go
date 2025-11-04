@@ -22,9 +22,7 @@ func Initialize(env string) {
 		// Use working-directory-relative path
 		short := file
 		if wd, err := os.Getwd(); err == nil {
-			if strings.HasPrefix(file, wd+"/") {
-				short = strings.TrimPrefix(file, wd+"/")
-			}
+			short, _ = strings.CutPrefix(file, wd+"/")
 		}
 		return fmt.Sprintf("%s:%d", short, line)
 	}
