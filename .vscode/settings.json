@@ -1,0 +1,25 @@
+{
+  "go.buildTags": "tools",
+  "gopls": {
+    "build.buildFlags": ["-tags=tools"],
+    "ui.diagnostic.analyses": {
+      "unusedparams": true,
+      "shadow": true,
+      "unusedwrite": true,
+      "useany": true
+    }
+  },
+  "go.alternateTools": {
+    "golangci-lint": "${workspaceFolder}/bin/golangci-lint"
+  },
+  "go.lintTool": "golangci-lint",
+  "go.lintFlags": [],
+  "go.lintOnSave": "workspace",
+  "go.useLanguageServer": true,
+  "[go]": {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    }
+  }
+}
