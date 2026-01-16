@@ -19,6 +19,7 @@ tool:
 	@echo "Installing tools from go.mod..."
 	@GOBIN=$(BIN) go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint
 	@GOBIN=$(BIN) go install go.uber.org/mock/mockgen
+	@GOBIN=$(BIN) go install github.com/golangci/golines@latest
 	@echo "Tools installed successfully!"
 
 build:
@@ -30,8 +31,8 @@ vet:
 
 .PHONY: fmt
 fmt:
-	go fmt
-
+	$(BIN)/golangci-lint fmt --config=.golangci.yml ./...
+	
 .PHONY: lint
 lint:
 	$(BIN)/golangci-lint run
