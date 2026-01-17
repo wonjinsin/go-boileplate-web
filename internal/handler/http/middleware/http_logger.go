@@ -10,16 +10,16 @@ import (
 	"github.com/wonjinsin/go-boilerplate/pkg/constants"
 )
 
-// HTTPLogger logs HTTP requests with TrID
+// HTTPLogger logs HTTP requests with TrID.
 func HTTPLogger() func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			start := time.Now()
 
-			// Wrap ResponseWriter to capture status code and bytes
+			// Wrap ResponseWriter to capture status code and bytes.
 			ww := middleware.NewWrapResponseWriter(w, r.ProtoMajor)
 
-			// Get TrID from context
+			// Get TrID from context.
 			trID := ""
 			if ctx := r.Context(); ctx != nil {
 				if id, ok := ctx.Value(constants.ContextKeyTrID).(string); ok {
@@ -27,10 +27,10 @@ func HTTPLogger() func(http.Handler) http.Handler {
 				}
 			}
 
-			// Process request
+			// Process request.
 			next.ServeHTTP(ww, r)
 
-			// Log after request is processed
+			// Log after request is processed.
 			duration := time.Since(start)
 
 			log.Info().

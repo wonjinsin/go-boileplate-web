@@ -12,30 +12,30 @@ import (
 	"github.com/wonjinsin/go-boilerplate/pkg/constants"
 )
 
-// Initialize sets up the global logger
+// Initialize sets up the global logger.
 func Initialize(env string) {
-	// Set time format to YYYY/MM/DD HH:MM:SS.mmm (e.g., 2025/01/01 01:01:01.333)
+	// Set time format to YYYY/MM/DD HH:MM:SS.mmm (e.g., 2025/01/01 01:01:01.333).
 	zerolog.TimeFieldFormat = "2006/01/02 15:04:05.000"
 
-	// Configure caller marshalling to include short file:line and function name
-	zerolog.CallerMarshalFunc = func(pc uintptr, file string, line int) string {
-		// Use working-directory-relative path
+	// Configure caller marshalling to include short file:line and function name.
+	zerolog.CallerMarshalFunc = func(_ uintptr, file string, line int) string {
+		// Use working-directory-relative path.
 		short := file
 		if wd, err := os.Getwd(); err == nil {
 			short, _ = strings.CutPrefix(file, wd+"/")
 		}
 		return fmt.Sprintf("%s:%d", short, line)
 	}
-	// Skip wrapper frames so the real caller (the site invoking Log*) is shown
+	// Skip wrapper frames so the real caller (the site invoking Log*) is shown.
 	zerolog.CallerSkipFrameCount = 3
 
-	// Build base logger
+	// Build base logger.
 	builder := zerolog.New(os.Stdout).With().Timestamp()
-	// Enable caller in all envs; skip wrapper frames so original callsite is shown
+	// Enable caller in all envs; skip wrapper frames so original callsite is shown.
 	builder = builder.CallerWithSkipFrameCount(3)
 	log.Logger = builder.Logger()
 
-	// Set log level based on environment
+	// Set log level based on environment.
 	if env == "local" || env == "dev" {
 		zerolog.SetGlobalLevel(zerolog.DebugLevel)
 	} else {
@@ -43,7 +43,7 @@ func Initialize(env string) {
 	}
 }
 
-// GetTrIDFromContext extracts TrID from context
+// GetTrIDFromContext extracts TrID from context.
 func GetTrIDFromContext(ctx context.Context) string {
 	if ctx == nil {
 		return ""
@@ -54,7 +54,7 @@ func GetTrIDFromContext(ctx context.Context) string {
 	return ""
 }
 
-// LogError logs an error with TrID from context
+// LogError logs an error with TrID from context.
 func LogError(ctx context.Context, msg string, err error) {
 	trID := GetTrIDFromContext(ctx)
 	if trID != "" {
@@ -69,7 +69,7 @@ func LogError(ctx context.Context, msg string, err error) {
 	}
 }
 
-// LogInfo logs an info message with TrID from context
+// LogInfo logs an info message with TrID from context.
 func LogInfo(ctx context.Context, msg string) {
 	trID := GetTrIDFromContext(ctx)
 	if trID != "" {
@@ -82,7 +82,7 @@ func LogInfo(ctx context.Context, msg string) {
 	}
 }
 
-// LogWarn logs a warning message with TrID from context
+// LogWarn logs a warning message with TrID from context.
 func LogWarn(ctx context.Context, msg string) {
 	trID := GetTrIDFromContext(ctx)
 	if trID != "" {
@@ -95,7 +95,7 @@ func LogWarn(ctx context.Context, msg string) {
 	}
 }
 
-// LogDebug logs a debug message with TrID from context
+// LogDebug logs a debug message with TrID from context.
 func LogDebug(ctx context.Context, msg string) {
 	trID := GetTrIDFromContext(ctx)
 	if trID != "" {
@@ -108,7 +108,7 @@ func LogDebug(ctx context.Context, msg string) {
 	}
 }
 
-// WithFields returns a logger with additional fields and TrID from context
+// WithFields returns a logger with additional fields and TrID from context.
 func WithFields(ctx context.Context, fields map[string]interface{}) *zerolog.Event {
 	trID := GetTrIDFromContext(ctx)
 	event := log.Info()

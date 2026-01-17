@@ -8,25 +8,25 @@ import (
 	"github.com/wonjinsin/go-boilerplate/internal/usecase"
 )
 
-// NewRouter creates and configures a new chi router
+// NewRouter creates and configures a new chi router.
 func NewRouter(userSvc usecase.UserService) *chi.Mux {
 	r := chi.NewRouter()
 
-	// Middleware
+	// Middleware.
 	r.Use(custommiddleware.TrID())
 	r.Use(custommiddleware.CORS())
 	r.Use(middleware.RealIP)
 	r.Use(custommiddleware.HTTPLogger())
 	r.Use(middleware.Recoverer)
 
-	// Controllers
+	// Controllers.
 	healthCtrl := NewHealthController()
 	userCtrl := NewUserController(userSvc)
 
-	// Routes
+	// Routes.
 	r.Get("/healthz", healthCtrl.Check)
 
-	// User routes
+	// User routes.
 	r.Route("/users", func(r chi.Router) {
 		r.Post("/", userCtrl.CreateUser)
 		r.Get("/", userCtrl.ListUsers)

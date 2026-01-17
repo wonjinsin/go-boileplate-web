@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -13,15 +14,15 @@ import (
 )
 
 func main() {
-	// Set timezone to UTC for the entire program
+	// Set timezone to UTC for the entire program.
 	time.Local = time.UTC
 
-	// Load .env.local
+	// Load .env.local.
 	if err := godotenv.Load(".env.local"); err != nil {
 		log.Printf("Warning: .env.local not found: %v", err)
 	}
 
-	// Build DATABASE_URL from individual components
+	// Build DATABASE_URL from individual components.
 	dbHost := os.Getenv("DB_HOST")
 	dbPort := os.Getenv("DB_PORT")
 	dbUser := os.Getenv("DB_USER")
@@ -42,7 +43,7 @@ func main() {
 	databaseURL := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s&timezone=UTC",
 		dbUser, dbPassword, dbHost, dbPort, dbName, dbSSLMode)
 
-	// Create migration instance
+	// Create migration instance.
 	m, err := migrate.New(
 		"file://migrations",
 		databaseURL,
@@ -52,7 +53,7 @@ func main() {
 	}
 	defer m.Close()
 
-	// Parse command from arguments
+	// Parse command from arguments.
 	if len(os.Args) < 2 {
 		printUsage()
 		os.Exit(1)
@@ -62,13 +63,13 @@ func main() {
 
 	switch command {
 	case "up":
-		if err := m.Up(); err != nil && err != migrate.ErrNoChange {
+		if err := m.Up(); err != nil && !errors.Is(err, migrate.ErrNoChange) {
 			log.Fatalf("Migration up failed: %v", err)
 		}
 		log.Println("Migration up completed successfully")
 
 	case "down":
-		if err := m.Down(); err != nil && err != migrate.ErrNoChange {
+		if err := m.Down(); err != nil && !errors.Is(err, migrate.ErrNoChange) {
 			log.Fatalf("Migration down failed: %v", err)
 		}
 		log.Println("Migration down completed successfully")

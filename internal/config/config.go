@@ -8,7 +8,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-// Config holds all application configuration
+// Config holds all application configuration.
 type Config struct {
 	Port       string
 	Env        string
@@ -20,10 +20,10 @@ type Config struct {
 	DBSSLMode  string
 }
 
-// Load reads configuration from .env.local file and environment variables
-// Environment variables take priority over file values
+// Load reads configuration from .env.local file and environment variables.
+// Environment variables take priority over file values.
 func Load() *Config {
-	// Try to load .env.local file (ignore error if file doesn't exist)
+	// Try to load .env.local file (ignore error if file doesn't exist).
 	_ = godotenv.Load(".env.local")
 
 	cfg := &Config{
@@ -43,7 +43,7 @@ func Load() *Config {
 	return cfg
 }
 
-// mustGetEnv reads an environment variable or panics if not found
+// mustGetEnv reads an environment variable or panics if not found.
 func mustGetEnv(key string) string {
 	value := os.Getenv(key)
 	if value == "" {
@@ -52,7 +52,7 @@ func mustGetEnv(key string) string {
 	return value
 }
 
-// getEnvOrDefault reads an environment variable or returns default value
+// getEnvOrDefault reads an environment variable or returns default value.
 func getEnvOrDefault(key, defaultValue string) string {
 	value := os.Getenv(key)
 	if value == "" {
@@ -61,7 +61,7 @@ func getEnvOrDefault(key, defaultValue string) string {
 	return value
 }
 
-// GetDatabaseURL constructs PostgreSQL connection string
+// GetDatabaseURL constructs PostgreSQL connection string.
 func (c *Config) GetDatabaseURL() string {
 	return fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s&timezone=UTC",
 		c.DBUser, c.DBPassword, c.DBHost, c.DBPort, c.DBName, c.DBSSLMode)

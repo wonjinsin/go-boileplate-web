@@ -9,13 +9,13 @@ import (
 	"github.com/wonjinsin/go-boilerplate/pkg/constants"
 )
 
-// GenerateID generates a unique ID using timestamp and counter
+// GenerateID generates a unique ID using timestamp and counter.
 func GenerateID(counter int64) string {
 	n := time.Now().UnixNano()
 	return FormatID(n, counter)
 }
 
-// FormatID formats timestamp and counter into a readable ID
+// FormatID formats timestamp and counter into a readable ID.
 func FormatID(timestamp int64, counter int64) string {
 	var buf [32]byte
 	i := len(buf)
@@ -29,7 +29,7 @@ func FormatID(timestamp int64, counter int64) string {
 	return string(buf[i:])
 }
 
-// GenerateRandomID generates a cryptographically secure random ID
+// GenerateRandomID generates a cryptographically secure random ID.
 func GenerateRandomID(length int) (string, error) {
 	if length <= 0 {
 		return "", fmt.Errorf("length must be positive")

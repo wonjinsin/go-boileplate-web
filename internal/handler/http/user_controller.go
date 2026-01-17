@@ -14,17 +14,17 @@ import (
 	"github.com/wonjinsin/go-boilerplate/pkg/utils"
 )
 
-// UserController handles user-related HTTP requests
+// UserController handles user-related HTTP requests.
 type UserController struct {
 	svc usecase.UserService
 }
 
-// NewUserController creates a new user controller
+// NewUserController creates a new user controller.
 func NewUserController(svc usecase.UserService) *UserController {
 	return &UserController{svc: svc}
 }
 
-// CreateUser handles user creation
+// CreateUser handles user creation.
 func (c *UserController) CreateUser(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	logger.LogInfo(ctx, "CreateUser request received")
@@ -40,7 +40,7 @@ func (c *UserController) CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	u, err := c.svc.CreateUser(ctx, req.Name, req.Email)
 	if err != nil {
-		// Extract error code and determine HTTP status
+		// Extract error code and determine HTTP status.
 		code := errors.GetCode(err)
 		var httpStatus int
 
@@ -52,7 +52,7 @@ func (c *UserController) CreateUser(w http.ResponseWriter, r *http.Request) {
 			httpStatus = http.StatusBadRequest
 			logger.LogWarn(ctx, "invalid parameter in create user")
 		case "":
-			// Non-CustomError, default to 500
+			// Non-CustomError, default to 500.
 			code = constants.InternalError
 			httpStatus = http.StatusInternalServerError
 			logger.LogError(ctx, "unexpected error in create user", err)
@@ -72,7 +72,7 @@ func (c *UserController) CreateUser(w http.ResponseWriter, r *http.Request) {
 	utils.WriteStandardJSON(w, r, http.StatusCreated, response)
 }
 
-// ListUsers handles user listing with pagination
+// ListUsers handles user listing with pagination.
 func (c *UserController) ListUsers(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	logger.LogInfo(ctx, "ListUsers request received")
@@ -96,7 +96,7 @@ func (c *UserController) ListUsers(w http.ResponseWriter, r *http.Request) {
 	utils.WriteStandardJSON(w, r, http.StatusOK, response)
 }
 
-// GetUser handles retrieving a single user by ID
+// GetUser handles retrieving a single user by ID.
 func (c *UserController) GetUser(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	logger.LogInfo(ctx, "GetUser request received")
@@ -121,7 +121,7 @@ func (c *UserController) GetUser(w http.ResponseWriter, r *http.Request) {
 
 	u, err := c.svc.GetUser(ctx, id)
 	if err != nil {
-		// Extract error code and determine HTTP status
+		// Extract error code and determine HTTP status.
 		code := errors.GetCode(err)
 		var httpStatus int
 

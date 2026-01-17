@@ -5,7 +5,7 @@ import (
 	"github.com/wonjinsin/go-boilerplate/internal/repository/postgres/dao/ent"
 )
 
-// toDomainUser converts ent.User to domain.User
+// toDomainUser converts ent.User to domain.User.
 func toDomainUser(u *ent.User) *domain.User {
 	return &domain.User{
 		ID:        u.ID,
@@ -15,8 +15,8 @@ func toDomainUser(u *ent.User) *domain.User {
 	}
 }
 
-// toEntUserData converts domain.User to ent values for creation/update
-// This is where you can add transformation logic if needed
+// toEntUserData converts domain.User to ent values for creation/update.
+// This is where you can add transformation logic if needed.
 func toEntUserData(u *domain.User) (name string, email string) {
 	return u.Name, u.Email
 }

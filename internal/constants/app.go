@@ -1,6 +1,6 @@
 package constants
 
-// Context keys (use unexported type for safety)
+// Context keys (use unexported type for safety).
 type contextKey string
 
 const (

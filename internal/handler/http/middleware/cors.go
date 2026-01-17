@@ -7,7 +7,7 @@ import (
 	"github.com/wonjinsin/go-boilerplate/pkg/constants"
 )
 
-// CORSConfig holds CORS configuration
+// CORSConfig holds CORS configuration.
 type CORSConfig struct {
 	AllowedOrigins []string
 	AllowedMethods []string
@@ -17,7 +17,7 @@ type CORSConfig struct {
 	Credentials    bool
 }
 
-// DefaultCORSConfig returns default CORS configuration
+// DefaultCORSConfig returns default CORS configuration.
 func DefaultCORSConfig() CORSConfig {
 	return CORSConfig{
 		AllowedOrigins: []string{"*"},
@@ -28,12 +28,12 @@ func DefaultCORSConfig() CORSConfig {
 			constants.HeaderAccept,
 		},
 		ExposedHeaders: []string{},
-		MaxAge:         86400, // 24 hours
+		MaxAge:         86400, // 24 hours.
 		Credentials:    false,
 	}
 }
 
-// CORS returns a middleware that handles Cross-Origin Resource Sharing
+// CORS returns a middleware that handles Cross-Origin Resource Sharing.
 func CORS(config ...CORSConfig) func(http.Handler) http.Handler {
 	cfg := DefaultCORSConfig()
 	if len(config) > 0 {
@@ -44,7 +44,7 @@ func CORS(config ...CORSConfig) func(http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			origin := r.Header.Get("Origin")
 
-			// Set CORS headers
+			// Set CORS headers.
 			if len(cfg.AllowedOrigins) > 0 {
 				if cfg.AllowedOrigins[0] == "*" {
 					w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -87,7 +87,7 @@ func CORS(config ...CORSConfig) func(http.Handler) http.Handler {
 				w.Header().Set("Access-Control-Allow-Credentials", "true")
 			}
 
-			// Handle preflight requests
+			// Handle preflight requests.
 			if r.Method == http.MethodOptions {
 				w.WriteHeader(http.StatusNoContent)
 				return

@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	"github.com/wonjinsin/go-boilerplate/pkg/constants"
+	pkgErrors "github.com/wonjinsin/go-boilerplate/pkg/errors"
 )
 
 // ParsePagination extracts pagination parameters from HTTP request.
@@ -39,7 +40,10 @@ func WriteJSON(w http.ResponseWriter, code int, v any) {
 // ParseJSONBody parses JSON request body into the provided struct.
 func ParseJSONBody(r *http.Request, v any) error {
 	defer r.Body.Close()
-	return json.NewDecoder(r.Body).Decode(v)
+	if err := json.NewDecoder(r.Body).Decode(v); err != nil {
+		return pkgErrors.Wrap(err, "failed to decode JSON body")
+	}
+	return nil
 }
 
 // ExtractPathParam extracts path parameter from URL

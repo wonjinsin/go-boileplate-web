@@ -20,19 +20,19 @@ import (
 )
 
 func main() {
-	// Print ASCII art banner
+	// Print ASCII art banner.
 	printBanner()
 
-	// Set timezone to UTC for the entire program
+	// Set timezone to UTC for the entire program.
 	time.Local = time.UTC
 
-	// Load configuration
+	// Load configuration.
 	cfg := config.Load()
 
-	// Initialize logger
+	// Initialize logger.
 	logger.Initialize(cfg.Env)
 
-	// Initialize database client
+	// Initialize database client.
 	entClient, err := database.NewEntClient(cfg)
 	if err != nil {
 		log.Fatalf("failed to initialize database: %v", err)
@@ -43,13 +43,13 @@ func main() {
 		}
 	}()
 
-	// Initialize repositories
+	// Initialize repositories.
 	userRepo := postgres.NewUserRepository(entClient)
 
-	// Wiring (Composition Root)
-	var userSvc usecase.UserService = usecase.NewUserService(userRepo)
+	// Wiring (Composition Root).
+	userSvc := usecase.NewUserService(userRepo)
 
-	// Create chi router
+	// Create chi router.
 	router := httpHandler.NewRouter(userSvc)
 
 	srv := &http.Server{
@@ -68,7 +68,7 @@ func main() {
 		}
 	}()
 
-	// Graceful shutdown
+	// Graceful shutdown.
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM)
 	<-stop
@@ -84,7 +84,7 @@ func main() {
 }
 
 func printBanner() {
-	// Read banner from file
+	// Read banner from file.
 	bannerPath := "internal/config/banner.asc"
 	bannerBytes, err := os.ReadFile(bannerPath)
 	if err != nil {

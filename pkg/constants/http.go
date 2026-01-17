@@ -1,21 +1,21 @@
 package constants
 
-// HTTP Status related constants
+// HTTP Status related constants.
 const (
-	// Default pagination values
+	// Default pagination values.
 	DefaultLimit  = 50
 	MaxLimit      = 200
 	DefaultOffset = 0
 )
 
-// HTTP Headers
+// HTTP Headers.
 const (
 	HeaderContentType   = "Content-Type"
 	HeaderAuthorization = "Authorization"
 	HeaderAccept        = "Accept"
 )
 
-// Content Types
+// Content Types.
 const (
 	ContentTypeJSONCharset = "application/json; charset=utf-8"
 )

@@ -16,21 +16,21 @@ type userRepo struct {
 	client *ent.Client
 }
 
-// NewUserRepository creates a new PostgreSQL-based user repository
+// NewUserRepository creates a new PostgreSQL-based user repository.
 func NewUserRepository(client *ent.Client) repository.UserRepository {
 	return &userRepo{client: client}
 }
 
-// Save creates or updates a user
+// Save creates or updates a user.
 func (r *userRepo) Save(u *domain.User) error {
 	ctx := context.Background()
 
-	// Apply transformations using mapper
+	// Apply transformations using mapper.
 	name, email := toEntUserData(u)
 
-	// Check if user already exists
+	// Check if user already exists.
 	if u.ID != 0 {
-		// Update existing user
+		// Update existing user.
 		_, err := r.client.User.
 			UpdateOneID(u.ID).
 			SetName(name).
@@ -42,7 +42,7 @@ func (r *userRepo) Save(u *domain.User) error {
 		return nil
 	}
 
-	// Create new user
+	// Create new user.
 	created, err := r.client.User.
 		Create().
 		SetName(name).
@@ -50,19 +50,19 @@ func (r *userRepo) Save(u *domain.User) error {
 		SetCreatedAt(u.CreatedAt).
 		Save(ctx)
 	if err != nil {
-		// Check for duplicate email error
+		// Check for duplicate email error.
 		if ent.IsConstraintError(err) {
 			return errors.New(constants.ConstraintError, "duplicate email", err)
 		}
 		return errors.Wrap(err, "failed to create user")
 	}
 
-	// Update domain object with generated ID
+	// Update domain object with generated ID.
 	u.ID = created.ID
 	return nil
 }
 
-// FindByID retrieves a user by ID
+// FindByID retrieves a user by ID.
 func (r *userRepo) FindByID(id int) (*domain.User, error) {
 	ctx := context.Background()
 
@@ -80,7 +80,7 @@ func (r *userRepo) FindByID(id int) (*domain.User, error) {
 	return toDomainUser(u), nil
 }
 
-// FindByEmail retrieves a user by email
+// FindByEmail retrieves a user by email.
 func (r *userRepo) FindByEmail(email string) (*domain.User, error) {
 	ctx := context.Background()
 
@@ -98,7 +98,7 @@ func (r *userRepo) FindByEmail(email string) (*domain.User, error) {
 	return toDomainUser(u), nil
 }
 
-// List retrieves a list of users with pagination
+// List retrieves a list of users with pagination.
 func (r *userRepo) List(offset, limit int) (domain.Users, error) {
 	ctx := context.Background()
 

@@ -2,7 +2,7 @@ package dto
 
 import "github.com/wonjinsin/go-boilerplate/internal/domain"
 
-// ToUserResponse converts domain.User to UserResponse
+// ToUserResponse converts domain.User to UserResponse.
 func ToUserResponse(user *domain.User) UserResponse {
 	return UserResponse{
 		ID:        user.ID,
@@ -12,7 +12,7 @@ func ToUserResponse(user *domain.User) UserResponse {
 	}
 }
 
-// ToUserListResponse converts domain.Users to UserListResponse
+// ToUserListResponse converts domain.Users to UserListResponse.
 func ToUserListResponse(users domain.Users, total, offset, limit int) UserListResponse {
 	userResponses := make([]UserResponse, len(users))
 	for i, user := range users {
