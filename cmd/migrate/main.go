@@ -30,7 +30,9 @@ func main() {
 	dbSSLMode := os.Getenv("DB_SSLMODE")
 
 	if dbHost == "" || dbPort == "" || dbUser == "" || dbPassword == "" || dbName == "" {
-		log.Fatal("Required database environment variables are not set (DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)")
+		log.Fatal(
+			"Required database environment variables are not set (DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)",
+		)
 	}
 
 	if dbSSLMode == "" {

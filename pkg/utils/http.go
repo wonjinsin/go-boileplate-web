@@ -10,7 +10,7 @@ import (
 	"github.com/wonjinsin/go-boilerplate/pkg/constants"
 )
 
-// ParsePagination extracts pagination parameters from HTTP request
+// ParsePagination extracts pagination parameters from HTTP request.
 func ParsePagination(r *http.Request) (offset, limit int) {
 	q := r.URL.Query()
 	offset, _ = strconv.Atoi(q.Get("offset"))
@@ -26,7 +26,7 @@ func ParsePagination(r *http.Request) (offset, limit int) {
 	return offset, limit
 }
 
-// WriteJSON writes JSON response with proper headers
+// WriteJSON writes JSON response with proper headers.
 func WriteJSON(w http.ResponseWriter, code int, v any) {
 	w.Header().Set(constants.HeaderContentType, constants.ContentTypeJSONCharset)
 	w.WriteHeader(code)
@@ -36,14 +36,14 @@ func WriteJSON(w http.ResponseWriter, code int, v any) {
 	}
 }
 
-// ParseJSONBody parses JSON request body into the provided struct
+// ParseJSONBody parses JSON request body into the provided struct.
 func ParseJSONBody(r *http.Request, v any) error {
 	defer r.Body.Close()
 	return json.NewDecoder(r.Body).Decode(v)
 }
 
 // ExtractPathParam extracts path parameter from URL
-// Example: ExtractPathParam("/users/123", "/users/") returns "123"
+// Example: ExtractPathParam("/users/123", "/users/") returns "123".
 func ExtractPathParam(path, prefix string) string {
 	if len(path) <= len(prefix) {
 		return ""
@@ -51,7 +51,7 @@ func ExtractPathParam(path, prefix string) string {
 	return path[len(prefix):]
 }
 
-// StandardResponse represents the standard HTTP response format
+// StandardResponse represents the standard HTTP response format.
 type StandardResponse struct {
 	TrID   string `json:"trid"`
 	Code   string `json:"code"`
@@ -60,8 +60,16 @@ type StandardResponse struct {
 
 // WriteStandardJSON writes a standard JSON response with TrID
 // Accepts an optional custom code string. If not provided, uses HTTP status code.
-func WriteStandardJSON(w http.ResponseWriter, r *http.Request, httpStatus int, result any, customCode ...string) {
-	// Get TrID from context
+func WriteStandardJSON(
+	w http.ResponseWriter,
+	r *http.Request,
+	httpStatus int,
+	result any,
+	customCode ...string,
+) {
+	// TEST LINE: This is a very very very very very very very very very very very very very very
+	// very very very very long comment line
+	// Get TrID from context.
 	trID := ""
 	if ctx := r.Context(); ctx != nil {
 		if id, ok := ctx.Value(constants.ContextKeyTrID).(string); ok {
@@ -69,7 +77,7 @@ func WriteStandardJSON(w http.ResponseWriter, r *http.Request, httpStatus int, r
 		}
 	}
 
-	// Determine response code: use custom code if provided, otherwise format HTTP status
+	// Determine response code: use custom code if provided, otherwise format HTTP status.
 	var codeStr string
 	if len(customCode) > 0 && customCode[0] != "" {
 		codeStr = customCode[0]
@@ -77,7 +85,7 @@ func WriteStandardJSON(w http.ResponseWriter, r *http.Request, httpStatus int, r
 		codeStr = fmt.Sprintf("%04d", httpStatus)
 	}
 
-	// Create standard response using struct (preserves field order)
+	// Create standard response using struct (preserves field order).
 	response := StandardResponse{
 		TrID:   trID,
 		Code:   codeStr,
